@@ -15,6 +15,7 @@ import android.widget.Toast
 import com.hackathon.youtubeview.R
 import com.hackathon.youtubeview.model.Video
 import com.hackathon.youtubeview.presenter.MainPresenter
+import com.squareup.picasso.Picasso
 import io.realm.Realm
 import io.realm.RealmRecyclerViewAdapter
 import io.realm.RealmResults
@@ -32,7 +33,9 @@ class MainActivity : AppCompatActivity(), MainPresenter.View {
         video_list.apply {
             setHasFixedSize(true)
             adapter =
-                VideoAdapter(Realm.getDefaultInstance().where(Video::class.java).findAllAsync())
+                VideoAdapter(Realm.getDefaultInstance().where(Video::class.java).findAllAsync()) {
+                    presenter.onVideoClick(it)
+                }
             layoutManager = LinearLayoutManager(context)
         }
     }
@@ -41,8 +44,15 @@ class MainActivity : AppCompatActivity(), MainPresenter.View {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
-    class VideoAdapter(data : RealmResults<Video>) : RealmRecyclerViewAdapter<Video, VideoAdapter.ViewHolder>(data, true, true) {
-        class ViewHolder(root: View) : RecyclerView.ViewHolder(root) {
+    override fun navigateToVideo(video: Video) {
+        val intent = Intent(this, VideoDetailsActivity::class.java)
+        intent.putExtra("id", video.id)
+        startActivity(intent)
+    }
+
+    class VideoAdapter(data : RealmResults<Video>, private val listener: ((Video) -> Unit)?) :
+                RealmRecyclerViewAdapter<Video, VideoAdapter.ViewHolder>(data, true, true) {
+        class ViewHolder(val root: View) : RecyclerView.ViewHolder(root) {
             val title: TextView = root.findViewById(R.id.title)
             val date: TextView = root.findViewById(R.id.date)
             val thumbnail: ImageView = root.findViewById(R.id.thumbnail)
@@ -50,23 +60,18 @@ class MainActivity : AppCompatActivity(), MainPresenter.View {
 
         override fun onCreateViewHolder(parent: ViewGroup, position: Int): ViewHolder {
             val rootView = LayoutInflater.from(parent.context).inflate(R.layout.video, parent, false)
-
-            rootView.setOnClickListener {
-                getItem(position)?.let { item ->
-                    val intent = Intent(rootView.context, VideoDetailsActivity::class.java)
-                    intent.putExtra("id", item.id)
-                    rootView.context.startActivity(intent)
-                }
-            }
-
             return ViewHolder(rootView)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item = getItem(position)
-
             if (item != null) {
                 holder.title.text = item.title
+                Picasso.get().load(item.thumbnail).fit().into(holder.thumbnail)
+
+                holder.root.setOnClickListener {
+                    listener?.invoke(item)
+                }
             }
         }
     }

@@ -34,7 +34,12 @@ class MainPresenter(private val view: View) {
         }
     }
 
+    fun onVideoClick(video: Video) {
+        view.navigateToVideo(video)
+    }
+
     interface View {
         fun showError(@StringRes message: Int)
+        fun navigateToVideo(video: Video)
     }
 }

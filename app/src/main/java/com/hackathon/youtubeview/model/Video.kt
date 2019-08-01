@@ -14,6 +14,7 @@ open class Video : RealmObject() {
     lateinit var description: String
     lateinit var date: Date
              var thumbnail: String? = null
+             var image: String? = null
 
     fun update(data: YoutubeService.YTItem): Video {
         val snippet = data.snippet ?: return this
@@ -21,7 +22,8 @@ open class Video : RealmObject() {
         title = snippet.title
         description = snippet.description
         date = snippet.publishedAt
-        thumbnail = snippet.thumbnails.get("medium")?.url ?: snippet.thumbnails.get("default")?.url
+        thumbnail = snippet.thumbnails["medium"]?.url
+        image = snippet.thumbnails["maxres"]?.url
         return this
     }
 
