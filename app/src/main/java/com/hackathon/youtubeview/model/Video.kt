@@ -15,6 +15,7 @@ open class Video : RealmObject() {
     lateinit var date: Date
              var thumbnail: String? = null
              var image: String? = null
+             var duration: String? = null
 
     val url: String
         get() = "https://www.youtube.com/watch?v=$id"

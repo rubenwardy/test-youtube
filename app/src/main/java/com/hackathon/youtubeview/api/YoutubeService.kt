@@ -12,11 +12,15 @@ interface YoutubeService {
     @GET("channels?part=contentDetails")
     fun getChannelInfo(@Query("id") id: String): Call<YTResponse>
 
-    @GET("playlistItems?part=snippet&maxResults=50     ")
+    @GET("playlistItems?part=snippet&maxResults=50")
     fun getPlaylist(@Query("playlistId") id: String): Call<YTResponse>
 
+    @GET("videos?part=contentDetails")
+    fun getVideo(@Query("id") id: String): Call<YTResponse>
+
     class YTContentDetails {
-        lateinit var relatedPlaylists: MutableMap<String, String>
+        var relatedPlaylists: MutableMap<String, String>? = null
+        var duration: String? = null
     }
 
     class YTThumbnail {

@@ -11,6 +11,7 @@ import android.widget.TextView
 import com.hackathon.youtubeview.R
 import com.hackathon.youtubeview.model.Video
 import com.hackathon.youtubeview.presenter.VideoDetailsPresenter
+import com.hackathon.youtubeview.util.Duration
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.activity_video_details.*
@@ -43,8 +44,10 @@ class VideoDetailsActivity : AppCompatActivity(), VideoDetailsPresenter.View {
         supportActionBar!!.title = null
 
         findViewById<TextView>(R.id.title).text = video.title
+
+        val duration = if (video.duration == null) "" else Duration.parse(video.duration!!).toString() + " • "
         val dateFormat = android.text.format.DateFormat.getDateFormat(applicationContext)
-        findViewById<TextView>(R.id.subtitle).text = dateFormat.format(video.date)
+        findViewById<TextView>(R.id.subtitle).text = duration + dateFormat.format(video.date)
         findViewById<TextView>(R.id.description).text = video.description
 
         val target = object : Target {
