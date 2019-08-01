@@ -23,16 +23,20 @@ interface YoutubeService {
         lateinit var url: String
     }
 
+    class YTResourceID {
+        lateinit var videoId: String
+    }
+
     class YTSnippet {
         lateinit var title: String
         lateinit var description: String
         lateinit var publishedAt: Date
         lateinit var thumbnails: Map<String, YTThumbnail>
+        lateinit var resourceId: YTResourceID
     }
 
     class YTItem {
         lateinit var kind: String
-        lateinit var id: String
         var contentDetails: YTContentDetails? = null
         var snippet: YTSnippet? = null
     }

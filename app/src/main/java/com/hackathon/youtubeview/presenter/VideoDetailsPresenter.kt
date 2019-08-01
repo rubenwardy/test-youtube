@@ -13,7 +13,7 @@ class VideoDetailsPresenter(private val view: View) {
 
     fun onPlayClick() {
         if (video != null) {
-            view.openURL("https://www.youtube.com/watch?v=${video!!.id}")
+            view.openURL(video!!.url)
         }
     }
 

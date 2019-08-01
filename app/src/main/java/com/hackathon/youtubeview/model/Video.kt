@@ -16,6 +16,9 @@ open class Video : RealmObject() {
              var thumbnail: String? = null
              var image: String? = null
 
+    val url: String
+        get() = "https://www.youtube.com/watch?v=$id"
+
     fun update(data: YoutubeService.YTItem): Video {
         val snippet = data.snippet ?: return this
 

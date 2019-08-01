@@ -27,7 +27,7 @@ class MainPresenter(private val view: View) {
                 val items = result2.getOrNull()?.items
                 Realm.getDefaultInstance().executeTransaction { realm ->
                     items?.forEach {
-                        Video.getOrCreate(realm, it.id).update(it)
+                        Video.getOrCreate(realm, it.snippet!!.resourceId.videoId).update(it)
                     }
                 }
             }
