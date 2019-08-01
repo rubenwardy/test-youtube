@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Youtube View</string>
+    <string name="unable_uploads">Unable to get the uploads playlist from the channel</string>
 </resources>
