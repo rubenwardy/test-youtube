@@ -1,7 +1,8 @@
-package com.hackathon.youtubeview
+package com.hackathon.youtubeview.view
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.annotation.StringRes
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -10,51 +11,33 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.hackathon.youtubeview.api.YoutubeService
-import com.hackathon.youtubeview.api.enqueue
+import com.hackathon.youtubeview.R
 import com.hackathon.youtubeview.model.Video
+import com.hackathon.youtubeview.presenter.MainPresenter
 import io.realm.Realm
 import io.realm.RealmRecyclerViewAdapter
 import io.realm.RealmResults
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainPresenter.View {
+    private val presenter = MainPresenter(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        syncVideos()
+        presenter.syncVideos()
 
         video_list.apply {
             setHasFixedSize(true)
-            adapter = VideoAdapter(Realm.getDefaultInstance().where(Video::class.java).findAllAsync())
+            adapter =
+                VideoAdapter(Realm.getDefaultInstance().where(Video::class.java).findAllAsync())
             layoutManager = LinearLayoutManager(context)
         }
     }
 
-    private fun syncVideos() {
-        val youtube = YoutubeService.create(BuildConfig.API_KEY)
-        val channel = BuildConfig.CHANNEL
-
-        // We need to first get the "uploads" playlist ID from a channel ID.
-        // Then we can get a list of videos in that playlist
-        youtube.getChannelInfo(channel).enqueue { result ->
-            val playlists = result.getOrNull()?.items?.getOrNull(0)?.contentDetails?.relatedPlaylists
-            val uploadsPlaylistId = playlists?.get("uploads")
-            if (uploadsPlaylistId == null) {
-                Toast.makeText(this@MainActivity, R.string.unable_uploads, Toast.LENGTH_LONG).show()
-                return@enqueue
-            }
-
-            youtube.getPlaylist(uploadsPlaylistId).enqueue { result2 ->
-                val items = result2.getOrNull()?.items
-                Realm.getDefaultInstance().executeTransaction { realm ->
-                    items?.forEach {
-                        Video.getOrCreate(realm, it.id).update(it)
-                    }
-                }
-            }
-        }
+    override fun showError(@StringRes message: Int) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
     class VideoAdapter(data : RealmResults<Video>) : RealmRecyclerViewAdapter<Video, VideoAdapter.ViewHolder>(data, true, true) {
