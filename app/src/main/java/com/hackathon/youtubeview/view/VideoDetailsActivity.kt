@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.widget.TextView
 import com.hackathon.youtubeview.R
 import com.hackathon.youtubeview.model.Video
 import com.hackathon.youtubeview.presenter.VideoDetailsPresenter
@@ -14,6 +15,7 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.activity_video_details.*
 import kotlinx.android.synthetic.main.content_video_details.*
+
 
 class VideoDetailsActivity : AppCompatActivity(), VideoDetailsPresenter.View {
     private val presenter = VideoDetailsPresenter(this)
@@ -40,6 +42,10 @@ class VideoDetailsActivity : AppCompatActivity(), VideoDetailsPresenter.View {
     override fun setDetails(video: Video) {
         supportActionBar!!.title = null
 
+        findViewById<TextView>(R.id.title).text = video.title
+        val dateFormat = android.text.format.DateFormat.getDateFormat(applicationContext)
+        findViewById<TextView>(R.id.subtitle).text = dateFormat.format(video.date)
+        findViewById<TextView>(R.id.description).text = video.description
 
         val target = object : Target {
             override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {

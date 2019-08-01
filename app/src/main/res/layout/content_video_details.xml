@@ -10,10 +10,35 @@
         android:layout_height="match_parent"
         tools:context=".view.VideoDetailsActivity">
 
-    <TextView
-            android:layout_width="wrap_content"
+    <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/large_text"/>
+            android:orientation="vertical"
+            android:padding="16dp">
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="50dp"
+                android:id="@+id/title"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:text="Are Pump Tracks Good For Beginners? | Ask GMBN Anything About Mountain Biking"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:id="@+id/subtitle"
+                android:textAppearance="?attr/textAppearanceListItemSecondary"
+                android:text="15m | 2nd March 2019"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/description"
+                android:text="@string/large_text"/>
+
+    </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

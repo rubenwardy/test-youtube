@@ -67,6 +67,9 @@ class MainActivity : AppCompatActivity(), MainPresenter.View {
             val item = getItem(position)
             if (item != null) {
                 holder.title.text = item.title
+                val dateFormat = android.text.format.DateFormat.getDateFormat(holder.date.context)
+                holder.date.text = dateFormat.format(item.date)
+
                 Picasso.get().load(item.thumbnail).fit().into(holder.thumbnail)
 
                 holder.root.setOnClickListener {
