@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.hackathon.youtubeview">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
             android:name=".MyApplication"
             android:allowBackup="true"
@@ -17,6 +18,15 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity
+                android:name=".view.VideoDetailsActivity"
+                android:label="@string/title_activity_video_details"
+                android:parentActivityName=".view.MainActivity"
+                android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="com.hackathon.youtubeview.view.MainActivity"/>
         </activity>
     </application>
 

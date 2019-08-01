@@ -1,5 +1,6 @@
 package com.hackathon.youtubeview.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.v7.app.AppCompatActivity
@@ -49,6 +50,15 @@ class MainActivity : AppCompatActivity(), MainPresenter.View {
 
         override fun onCreateViewHolder(parent: ViewGroup, position: Int): ViewHolder {
             val rootView = LayoutInflater.from(parent.context).inflate(R.layout.video, parent, false)
+
+            rootView.setOnClickListener {
+                getItem(position)?.let { item ->
+                    val intent = Intent(rootView.context, VideoDetailsActivity::class.java)
+                    intent.putExtra("id", item.id)
+                    rootView.context.startActivity(intent)
+                }
+            }
+
             return ViewHolder(rootView)
         }
 
