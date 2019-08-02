@@ -18,6 +18,7 @@ open class Comment : RealmObject() {
 
         author = snippet.authorDisplayName!!
         authorImageURL = snippet.authorProfileImageUrl!!
+        textDisplay = snippet.textDisplay!!
         return this
     }
 

@@ -6,13 +6,18 @@ import com.hackathon.youtubeview.api.enqueue
 import com.hackathon.youtubeview.model.Comment
 import com.hackathon.youtubeview.model.Video
 import io.realm.Realm
+import io.realm.RealmResults
 
 class VideoDetailsPresenter(private val view: View) {
     private var video: Video? = null
 
     fun setup(id: String) {
-        video = Realm.getDefaultInstance().where(Video::class.java).equalTo("id", id).findFirst()
+        val realm = Realm.getDefaultInstance()
+
+        video = realm.where(Video::class.java).equalTo("id", id).findFirst()
         view.setDetails(video!!)
+
+
 
         if (video!!.duration == null) {
             fetchDuration(video!!)
@@ -47,6 +52,8 @@ class VideoDetailsPresenter(private val view: View) {
                     video?.comments?.add(comment)
                 }
             }
+
+            view.showComments(video!!.comments.where().findAllAsync())
         }
     }
 
@@ -59,5 +66,6 @@ class VideoDetailsPresenter(private val view: View) {
     interface View {
         fun setDetails(video: Video)
         fun openURL(url: String)
+        fun showComments(comments: RealmResults<Comment>)
     }
 }

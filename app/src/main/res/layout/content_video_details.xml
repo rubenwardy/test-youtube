@@ -39,6 +39,22 @@
                 android:id="@+id/description"
                 android:text="@string/large_text"/>
 
+        <!-- Element needed to fix recycler view in scroll view -->
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <!--
+                This currently displays at full height, effectively making the view pool useless.
+                With more time, this should be fixed.
+            -->
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/comment_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+
+        </RelativeLayout>
+
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>
