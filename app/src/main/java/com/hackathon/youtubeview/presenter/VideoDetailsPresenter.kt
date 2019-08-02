@@ -3,6 +3,7 @@ package com.hackathon.youtubeview.presenter
 import com.hackathon.youtubeview.BuildConfig
 import com.hackathon.youtubeview.api.YoutubeService
 import com.hackathon.youtubeview.api.enqueue
+import com.hackathon.youtubeview.model.Comment
 import com.hackathon.youtubeview.model.Video
 import io.realm.Realm
 
@@ -16,6 +17,8 @@ class VideoDetailsPresenter(private val view: View) {
         if (video!!.duration == null) {
             fetchDuration(video!!)
         }
+
+        fetchComments(video!!.id!!)
     }
 
     private fun fetchDuration(video: Video) {
@@ -28,6 +31,22 @@ class VideoDetailsPresenter(private val view: View) {
             }
 
             view.setDetails(video)
+        }
+    }
+
+    private fun fetchComments(videoID: String) {
+        YoutubeService.create(BuildConfig.API_KEY).getComments(videoID).enqueue {
+            val comments = it.getOrNull()?.items
+                ?: return@enqueue
+
+            Realm.getDefaultInstance().executeTransaction { realm ->
+                video?.comments?.clear()
+                comments.forEach { item ->
+                    val comment = Comment.getOrCreate(realm, item.snippet!!.topLevelComment!!.id)
+                    comment.update(item)
+                    video?.comments?.add(comment)
+                }
+            }
         }
     }
 
